@@ -63,6 +63,7 @@ dialog img{display:block;max-width:100%;max-height:70vh;margin:auto}
 .mantra{font-family:var(--serif);font-size:1.25rem;line-height:2.1;margin-top:18px}
 nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));display:flex;gap:2px;padding:6px;background:rgba(94,22,66,.96);border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:5;max-width:96vw}
 nav a{color:#fff;text-decoration:none;min-height:44px;display:flex;align-items:center;padding:0 12px;border-radius:999px;font-size:.88rem;white-space:nowrap}
+nav button{color:#5e1642;background:#f6dbe5;border:0;min-height:44px;min-width:48px;border-radius:999px;font:inherit;font-size:.9rem;cursor:pointer;white-space:nowrap}
 #cover{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;text-align:center;padding:20px;overflow:auto;background:radial-gradient(circle at 50% 30%,#fffaf4,#f6dbe5 60%,#e6d3ee);transition:opacity .7s,transform .7s}
 #cover:focus{outline:0}
 #cover.open{opacity:0;transform:scale(1.08);pointer-events:none}
@@ -92,7 +93,6 @@ body.locked{overflow:hidden}
   <h1 id="coverTitle">સ્વાગત સમારોહ</h1>
   <p class="name">ચી. નીવિશા</p>
   <button class="btn" id="openBtn" type="button">આમંત્રણ ખોલો · Open</button>
-  <button class="btn alt" id="skipBtn" type="button">Skip</button>
 </div>
 
 <main id="top">
@@ -116,7 +116,7 @@ body.locked{overflow:hidden}
   <h2 id="inviteT">ભાવભર્યું આમંત્રણ</h2><span class="en">Our invitation</span>
   <svg class="sprig" aria-hidden="true"><use href="#sprig"/></svg>
   <div class="card msg">
-    <p>રાજનગર ની પવીત્ર ભૂમિ પર ગુરુદેવ પ. પૂ. ગચ્છાધિપતિ આચાર્ય ભગવંત <strong>શ્રીમદ વિજય નરરત્નસુરીશ્વરજી મહારાજ</strong> ની પાવન નિશ્રામાં</p>
+    <p>રાજનગર ની પવીત્ર ભૂમિ પર ગુરુદેવ પ. પૂ. ગચ્છાધિપતિ આચાર્ય ભગવંત <strong>શ્રીમદ વિજય નરરત્નસુરીશ્વરજી મહારાજસાહેબ</strong> ની પાવન નિશ્રામાં</p>
     <p>તપ, ત્યાગ, સંયમ અને ભક્તિની અને નવકાર મહામંત્ર પામવાનું પ્રમાણપત્ર મેળવી ને ઉપધાન તપ પૂર્ણ કરીને આવતી અમારી લાડકી <strong>ચી. નીવિશા</strong></p>
     <p>ઉપધાન તપની આ પાવન આરાધના પૂર્ણ કરીને મોક્ષમાળ પરિધાન કરી આવતી અમારી નાનકડી તપસ્વીની ના આગમનને યાદગાર બનાવવા અને ભવ્ય સ્વાગત સમારોહનું આયોજન કર્યું છે.</p>
     <p>આપ સહપરિવાર પધારી આ શુભ પ્રસંગની શોભા વધારશો અને અમારી લાડકીને આશીર્વાદ આપશો તેવું અમારું હાર્દિક આમંત્રણ પાઠવીએ છીએ.</p>
@@ -131,7 +131,7 @@ body.locked{overflow:hidden}
   <h2 id="progT">મંગલ કાર્યક્રમ</h2><span class="en">Saturday, 12 December 2026</span>
   <svg class="sprig" aria-hidden="true"><use href="#sprig"/></svg>
   <ul class="time">
-    <li><b>સવારે ૯:૦૦ · 9:00 AM</b><strong>સ્વાગત સમારોહ</strong><br>Jain Devotional Singer: Darshil Shah</li>
+    <li><b>સવારે ૯:૦૦ · 9:00 AM</b><strong>સ્વાગત સમારોહ</strong><br>સંગીત ની સુરાવલી<br>Jain Devotional Singer: Darshil Shah</li>
     <li><b>બપોરે ૧૨:૦૦ · 12:00 Noon</b><strong>ભોજન · Lunch</strong></li>
   </ul>
   <div class="row"><a class="btn" id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a><button class="btn alt" id="ics" type="button">Save to phone calendar</button></div>
@@ -171,7 +171,10 @@ body.locked{overflow:hidden}
 </section>
 </main>
 
-<nav aria-label="Quick links"><a href="#top">Home</a><a href="#programme">કાર્યક્રમ</a><a href="#photos">Photos</a><a href="#venue">સ્થળ</a></nav>
+<nav aria-label="Quick links"><a href="#top">Home</a><a href="#programme">કાર્યક્રમ</a><a href="#photos">Photos</a><a href="#venue">સ્થળ</a><button type="button" id="music" aria-label="Play song" aria-pressed="false">▶ ♪</button></nav>
+
+<!-- The song: upload a file named song.mp3 next to index.html. It repeats from the start when it ends. -->
+<audio id="song" src="song.mp3" loop preload="auto"></audio>
 
 <dialog id="box" aria-label="Picture viewer"><img id="boxImg" alt=""><div class="row"><a class="btn alt" id="save" download>Download</a><button class="btn" id="close" type="button">Close</button></div></dialog>
 
@@ -226,11 +229,29 @@ const copy = () => (navigator.clipboard ? navigator.clipboard.writeText(location
 $("copyBtn").onclick = copy;
 $("shareBtn").onclick = () => navigator.share ? navigator.share({title:"સ્વાગત સમારોહ",text:"જય જિનેન્દ્ર! ચી. નીવિશાના સ્વાગત સમારોહમાં પધારવા ભાવભર્યું આમંત્રણ.",url:location.href}).catch(err => { if (err.name !== "AbortError") copy(); }) : copy();
 
+/* song: plays across the whole page, from the opening screen onward */
+const song = $("song"), musicBtn = $("music");
+const paint = () => { const on = !song.paused; musicBtn.textContent = on ? "❚❚ ♪" : "▶ ♪"; musicBtn.setAttribute("aria-label", on ? "Pause song" : "Play song"); musicBtn.setAttribute("aria-pressed", String(on)); };
+const play = () => song.play().catch(paint);
+song.onplay = song.onpause = paint;
+song.onerror = () => musicBtn.hidden = true;            /* no song.mp3 found: hide the button */
+if (song.error) musicBtn.hidden = true;
+let stopped = false;                                    /* true once the guest presses pause */
+musicBtn.onclick = () => { stopped = !song.paused; if (stopped) song.pause(); else play(); };
+/* try at once; where the browser blocks that, start at the first tap or key press anywhere */
+const kick = e => { if (!stopped && song.paused && !musicBtn.contains(e.target)) play(); };
+["click","touchend","keydown"].forEach(type => document.addEventListener(type, kick, true));
+play();
+let resume = false;                                     /* pause when the guest leaves the page, continue on return */
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden){ resume = !song.paused; song.pause(); } else if (resume) play();
+});
+
 /* opening cover */
 const cover = $("cover"), page = $("top"), nav = document.querySelector("nav");
 cover.hidden = false; document.body.classList.add("locked"); page.inert = nav.inert = true; cover.tabIndex = -1; cover.focus({preventScroll:true});
 const open = fast => { page.inert = nav.inert = false; document.body.classList.remove("locked"); if (fast) cover.hidden = true; else { cover.classList.add("open"); setTimeout(() => cover.hidden = true, 750); } };
-$("openBtn").onclick = () => open(false); $("skipBtn").onclick = () => open(true);
+$("openBtn").onclick = () => { play(); open(false); };
 cover.addEventListener("keydown", k => { if (k.key === "Escape") open(true); });
 
 if ("IntersectionObserver" in window){
